@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/homescreen.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:to_do/Screens/homescreen.dart';
+import 'package:to_do/Screens/splash_screen.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter(); //initialize Hive boc
+  var box = await Hive.openBox("my_box"); //opening database
   runApp(const MyApp());
 }
 
@@ -13,10 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true
-      ),
-      home: HomeScreen(),
+      home: SplashScreen(),
     );
   }
 }
