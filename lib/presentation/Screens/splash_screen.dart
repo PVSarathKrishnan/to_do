@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:to_do/Screens/homescreen.dart';
+import 'package:to_do/presentation/Screens/homescreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
     _controller.forward();
     // Start a timer to navigate to the home screen after 3 seconds
-    Timer(Duration(milliseconds:2500 ), () {
+    Timer(Duration(milliseconds: 2500), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => HomeScreen()),
       );
@@ -54,9 +54,8 @@ class _SplashScreenState extends State<SplashScreen>
               Lottie.asset("lib/assets/splash.json", height: 180, width: 150),
               SizedBox(height: 20),
               Text(
-                "TODOGO",
-                style: GoogleFonts.koulen(
-                  letterSpacing: 2,
+                "ToDoGo",
+                style: GoogleFonts.grapeNuts(
                   fontSize: 32,
                   color: Colors.black,
                 ),

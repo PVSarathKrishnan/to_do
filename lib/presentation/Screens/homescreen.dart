@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:to_do/db/database.dart';
-import 'package:to_do/utilities/dialoguebox.dart';
-import 'package:to_do/utilities/todo_tile.dart';
+import 'package:to_do/core/database.dart';
+import 'package:to_do/presentation/utilities/confir_reset_widget.dart';
+import 'package:to_do/presentation/utilities/dialoguebox.dart';
+import 'package:to_do/presentation/utilities/todo_tile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -60,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
           controller: _controller,
           onCancel: () => Navigator.of(context).pop(),
           onSave: saveNewTask,
+          isDarkTheme: darktheme,
         );
       },
     );
@@ -72,6 +74,15 @@ class _HomeScreenState extends State<HomeScreen> {
     db.updateData();
   }
 
+  void clearData() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmResetWidget(mybox: _mybox);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,16 +90,25 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        child: Icon(Icons.add),
         onPressed: createNewTask,
+        child: Icon(Icons.add),
       ),
       appBar: AppBar(
         backgroundColor: darktheme ? Colors.white : Colors.black,
         elevation: 3,
+        leading: IconButton(
+          tooltip: "Reset the data",
+          icon: Icon(
+            Icons.delete_forever,
+            color: darktheme ? Colors.black : Colors.white,
+          ),
+          onPressed: () {
+            clearData();
+          },
+        ),
         title: Text(
           "ToDoGo",
-          style: GoogleFonts.koulen(
-            letterSpacing: 9,
+          style: GoogleFonts.grapeNuts(
             fontSize: 32,
             color: darktheme ? Colors.black : Colors.white,
           ),
@@ -96,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         actions: [
           IconButton(
+            tooltip: darktheme ? "switch to lighttheme" : "switch to darktheme",
             onPressed: () {
               setState(() {
                 darktheme = !darktheme;
@@ -104,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: darktheme
                 ? Icon(
                     Icons.sunny,
-                    color: Colors.black,
+                    color: Colors.black87,
                   )
                 : Icon(
                     Icons.nightlight,

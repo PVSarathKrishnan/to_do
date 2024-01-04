@@ -38,7 +38,7 @@ class ToDoTile extends StatelessWidget {
             color: textColor, // Use textColor for the background
             borderRadius: BorderRadius.circular(12),
           ),
-          padding: EdgeInsets.symmetric(horizontal:15,vertical: 3),
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 3),
           child: Row(
             children: [
               Container(
@@ -49,7 +49,8 @@ class ToDoTile extends StatelessWidget {
                   border: Border.all(
                     color: backgroundColor == Colors.white
                         ? Colors.white // Black border for white background
-                        : Colors.black, // Transparent border for other backgrounds
+                        : Colors
+                            .black, // Transparent border for other backgrounds
                   ),
                 ),
                 child: Checkbox(
@@ -72,9 +73,10 @@ class ToDoTile extends StatelessWidget {
               Expanded(
                 child: AnimatedDefaultTextStyle(
                   duration: Duration(milliseconds: 300),
-                  style: GoogleFonts.suezOne(
+                  style: GoogleFonts.bitter(
                     fontSize: taskCompleted ? 16 : 19,
-                    color: backgroundColor, // Use backgroundColor for the text color
+                    color:
+                        backgroundColor, // Use backgroundColor for the text color
                     decoration: taskCompleted
                         ? TextDecoration.lineThrough
                         : TextDecoration.none,
