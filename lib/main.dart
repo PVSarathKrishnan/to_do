@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:to_do/presentation/Screens/homescreen.dart';
 import 'package:to_do/presentation/Screens/splash_screen.dart';
 
 void main() async {

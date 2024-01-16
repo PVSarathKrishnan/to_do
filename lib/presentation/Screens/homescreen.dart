@@ -5,6 +5,7 @@ import 'package:to_do/core/database.dart';
 import 'package:to_do/presentation/utilities/confir_reset_widget.dart';
 import 'package:to_do/presentation/utilities/dialoguebox.dart';
 import 'package:to_do/presentation/utilities/todo_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -74,6 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
     db.updateData();
   }
 
+  void _openDrawer() {
+    Scaffold.of(_scaffoldContext!).openEndDrawer();
+  }
+
+  BuildContext? _scaffoldContext;
+
   void clearData() {
     showDialog(
       context: context,
@@ -88,8 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: getBackgroundColor(),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor:  darktheme ? Colors.white : Colors.black,
+        foregroundColor:  darktheme ?  Colors.black : Colors.white,
         onPressed: createNewTask,
         child: Icon(Icons.add),
       ),
@@ -97,16 +104,23 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: darktheme ? Colors.white : Colors.black,
         elevation: 3,
         leading: IconButton(
-          tooltip: "Reset the data",
-          icon: Icon(
-            Icons.delete_forever,
-            color: darktheme ? Colors.black : Colors.white,
-          ),
+          tooltip: darktheme ? "switch to lighttheme" : "switch to darktheme",
           onPressed: () {
-            clearData();
+            setState(() {
+              darktheme = !darktheme;
+            });
           },
+          icon: darktheme
+              ? Icon(
+                  Icons.sunny,
+                  color: Colors.black87,
+                )
+              : Icon(
+                  Icons.nightlight,
+                  color: Colors.white,
+                ),
         ),
-        title: Text(
+          title: Text(
           "ToDoGo",
           style: GoogleFonts.grapeNuts(
             fontSize: 32,
@@ -115,24 +129,77 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            tooltip: darktheme ? "switch to lighttheme" : "switch to darktheme",
-            onPressed: () {
-              setState(() {
-                darktheme = !darktheme;
-              });
+          Builder(
+            builder: (BuildContext context) {
+              _scaffoldContext = context;
+              return IconButton(
+                onPressed: _openDrawer,
+                icon: Icon(
+                  Icons.view_sidebar,
+                  color: darktheme ? Colors.black : Colors.white,
+                ),
+              );
             },
-            icon: darktheme
-                ? Icon(
-                    Icons.sunny,
-                    color: Colors.black87,
-                  )
-                : Icon(
-                    Icons.nightlight,
-                    color: Colors.white,
-                  ),
-          )
+          ),
         ],
+      ),
+      endDrawer: Drawer(
+        backgroundColor: darktheme ? Colors.black : Colors.white,
+        width: 250,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              padding: EdgeInsets.all(9),
+              decoration: BoxDecoration(
+                color: darktheme ? Colors.white : Colors.black,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: darktheme ? Colors.black : Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.privacy_tip,
+                    color: darktheme ? Colors.white : Colors.black,
+                  ),
+                  Text(
+                    'Privacy Policy',
+                    style: TextStyle(
+                        color: darktheme ? Colors.white : Colors.black),
+                  ),
+                ],
+              ),
+              onTap: () {
+                _launchPPURL(
+                    "https://www.freeprivacypolicy.com/live/7b93da92-6ea5-4f9c-8465-61432792873d");
+              },
+            ),
+            ListTile(
+                title: Row(
+                  children: [
+                    Icon(
+                      Icons.delete_forever,
+                      color: darktheme ? Colors.white : Colors.black,
+                    ),
+                    Text(
+                      'Reset Data',
+                      style: TextStyle(
+                          color: darktheme ? Colors.white : Colors.black),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  clearData();
+                }),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -151,5 +218,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void _launchPPURL(String url) async {
+    Uri url = Uri.parse(
+        'https://www.freeprivacypolicy.com/live/7b93da92-6ea5-4f9c-8465-61432792873d');
+    if (await launchUrl(url)) {
+      //browser opened
+    } else {
+      SnackBar(content: Text("couldn't launch the page"));
+    }
   }
 }
